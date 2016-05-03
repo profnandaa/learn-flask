@@ -6,6 +6,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
+
  
 Base = declarative_base()
 
@@ -27,6 +28,7 @@ class User(Base):
 		session.add(self)
 		session.commit()
 
+
 class Blog(Base):
 	__tablename__ = 'blog'
 	id = Column(Integer, primary_key=True)
@@ -34,6 +36,10 @@ class Blog(Base):
 	url = Column(String(100), unique=True)
 	user_id = Column(Integer, ForeignKey('user.id'))
 	user = relationship(User)
+
+	def save(self):
+		session.add(self)
+		session.commit()
 
 class Post(Base):
 	__tablename__ = 'post'
@@ -43,6 +49,10 @@ class Post(Base):
 	date_time = Column(DateTime, default=datetime.datetime.utcnow)
 	blog_id = Column(Integer, ForeignKey('blog.id'))
 	blog = relationship(Blog)
+
+	def save(self):
+		session.add(self)
+		session.commit()
 
 
 # to run migrations (sort of)

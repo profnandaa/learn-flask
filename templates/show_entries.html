@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1>Your Entries</h1>
+
+{%for entry in entries %}
+    <h3>{{ entry.title }}</h3>
+    <p>{{ entry.body }}</p>
+{% endfor %}
 
 
 

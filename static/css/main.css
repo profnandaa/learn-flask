@@ -77,3 +77,16 @@ body {
     border-bottom: 0;
   }
 }
+
+/*others*/
+.form-control {
+  margin-bottom: 5px;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+.main {
+  min-height: 400px;
+}

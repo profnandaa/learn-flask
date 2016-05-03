@@ -1,35 +1,16 @@
 # all the imports
 import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, \
+from flask import Flask, request, g, redirect, url_for, \
      abort, render_template, flash
+from basic_models import Post, session
 
 # configuration
 DATABASE = 'db/app.db'
-DEBUG = True
-SECRET_KEY = 'xhjshjhsnd'
-USERNAME = 'admin'
-PASSWORD = 'default'
 
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-
-# app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-
-def connect_db():
-    # print app.config(['DATABASE'])
-    return sqlite3.connect(DATABASE)
-
-@app.before_request
-def before_request():
-    g.db = connect_db()
-
-@app.teardown_request
-def teardown_request(exception):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
 
 # Routes
 
@@ -37,17 +18,27 @@ def teardown_request(exception):
 def home():
 	return render_template('home.html')
 
-@app.route('/entries/')
+
+# for basic demonstration
+
+@app.route('/add', methods=['GET', 'POST'])
+def add_entry():
+    if request.method == 'POST':
+        form = {
+            'title': request.form['title'],
+            'body':  request.form['body']
+        }
+        entry = Post(**form)
+        entry.save()
+    return render_template('add_entry.html')
+
+@app.route('/entries')
 def show_entries():
-    cur = g.db.execute('select title, text from entries order by id desc')
-    entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
+    entries = session.query(Post).all()
+    # import pdb; pdb.set_trace()
     return render_template('show_entries.html', entries=entries)
 
 
-
-
-
-
 if __name__ == '__main__':
-    app.run(port=8001)
+    app.run(debug=True, port=8004)
 
