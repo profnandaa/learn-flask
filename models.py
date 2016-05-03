@@ -1,11 +1,10 @@
 
-import os
-import sys
+# Basic models for demonstration
+
 import datetime
-from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base 
 from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy import create_engine
 
  
 Base = declarative_base()
@@ -16,26 +15,14 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
 class User(Base):
 	__tablename__ = 'user'
 	id = Column(Integer, primary_key=True)
-	name = Column(String(250), nullable=False)
-	email = Column(String(250), nullable=False)
+	first_name = Column(String(100))
+	last_name = Column(String(100))
+	username = Column(String(100), nullable=False)
+	email = Column(String(100))
 	password = Column(String(100))
-
-	def save(self):
-		session.add(self)
-		session.commit()
-
-
-class Blog(Base):
-	__tablename__ = 'blog'
-	id = Column(Integer, primary_key=True)
-	name = Column(Strinzg(250), nullable=False)
-	url = Column(String(100), unique=True)
-	user_id = Column(Integer, ForeignKey('user.id'))
-	user = relationship(User)
 
 	def save(self):
 		session.add(self)
@@ -47,16 +34,11 @@ class Post(Base):
 	title = Column(String(250), nullable=False)
 	body = Column(Text)
 	date_time = Column(DateTime, default=datetime.datetime.utcnow)
-	blog_id = Column(Integer, ForeignKey('blog.id'))
-	blog = relationship(Blog)
+	user_id = Column(Integer, ForeignKey('user.id'))
+	user = relationship(User)
 
 	def save(self):
 		session.add(self)
 		session.commit()
-
-
-# to run migrations (sort of)
-if __name__ == '__main__':
-	Base.metadata.create_all(engine)
 
 
