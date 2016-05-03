@@ -1,7 +1,6 @@
 
-# Basic models for demostration
-import os
-import sys
+# Basic models for demonstration
+
 import datetime
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
