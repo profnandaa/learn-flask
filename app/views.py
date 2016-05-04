@@ -1,8 +1,14 @@
-from flask import Flask, request, g, redirect, url_for, \
-     abort, render_template, flash
+from flask import Flask, request, redirect, url_for, render_template
 from models import Post, User, session
 
-app = Flask(__name__)
+# a few configs due to the restructuing of
+# the app folders/directories
+configs = {
+    'template_folder': '../templates',
+    'static_folder': '../static'
+}
+
+app = Flask('app', **configs)
 
 @app.route('/')
 def home():
