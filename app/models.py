@@ -6,6 +6,9 @@ from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, F
 from sqlalchemy.ext.declarative import declarative_base 
 from sqlalchemy.orm import relationship, sessionmaker
 
+from werkzeug.security import generate_password_hash, \
+     check_password_hash
+
  
 Base = declarative_base()
 
@@ -21,12 +24,17 @@ class User(Base):
 	first_name = Column(String(100))
 	last_name = Column(String(100))
 	username = Column(String(100), nullable=False)
-	email = Column(String(100))
+	email = Column(String(100)) # not currently in use
 	password = Column(String(100))
 
 	def save(self):
+		# hash the password
+		self.password = generate_password_hash(self.password)
 		session.add(self)
 		session.commit()
+
+	def valid_password(self, password):
+		return check_password_hash(self.password, password)
 
 class Post(Base):
 	__tablename__ = 'post'

@@ -14,6 +14,21 @@ app = Flask('app', **configs)
 def home():
 	return render_template('home.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # register user
+        form = {
+            'first_name': request.form['first_name'],
+            'last_name' : request.form['last_name'],
+            'username'  : request.form['last_name'],
+            'password'  : request.form['password']
+        }
+        user = User(**form)
+        user.save()
+    return render_template('register.html')
+
+
 @app.route('/add', methods=['GET', 'POST'])
 def add_post():
     if request.method == 'POST':
