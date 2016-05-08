@@ -25,9 +25,17 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="/">Home</a></li>
+            <li role="presentation"><a href="/">Home</a></li>
             <li role="presentation"><a href="/posts">Posts</a></li>
             <li role="presentation"><a href="/add">Add</a></li>
+            {% if session['user'] %}
+              <li class="dropdown active">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session['user']['username']}}
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </li>
+            {% endif %}
           </ul>
         </nav>
         <h3 class="text-muted">MicroBlog</h3>
@@ -42,6 +50,7 @@
       </footer>
 
     </div> <!-- /container -->
-
+    <script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
   </body>
 </html>

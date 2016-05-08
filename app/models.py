@@ -36,6 +36,14 @@ class User(Base):
 	def valid_password(self, password):
 		return check_password_hash(self.password, password)
 
+	@classmethod
+	def validate(cls, **kwargs):
+		user = session.query(cls).filter(cls.username==kwargs.get('username'))
+		if user.count() == 0:
+			return False, {}
+		user = user.one()
+		return user.valid_password(kwargs.get('password')), user
+
 class Post(Base):
 	__tablename__ = 'post'
 	id = Column(Integer, primary_key=True)
@@ -48,5 +56,11 @@ class Post(Base):
 	def save(self):
 		session.add(self)
 		session.commit()
+
+	@classmethod
+	def get(cls, **kwargs):
+		if kwargs:
+			pass
+		return session.query(Post).all()
 
 

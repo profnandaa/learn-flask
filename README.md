@@ -16,3 +16,4 @@ The aim of this intro is to serve as soft starting point for any beginner who ju
 - [Python Central: Introduction to SQLAlchemy](http://pythoncentral.io/introductory-tutorial-python-sqlalchemy/)
 - [Pocoo: Flask Quickstart](http://flask.pocoo.org/docs/0.10/quickstart/)
 - [Pocoo: Salted Passwords](http://flask.pocoo.org/snippets/54/)
+- [Pocoo: View Decorators](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/)

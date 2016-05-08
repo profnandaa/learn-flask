@@ -1,5 +1,6 @@
-from flask import Flask, request, redirect, url_for, render_template
-from models import Post, User, session
+from functools import wraps
+from flask import Flask, request, redirect, url_for, render_template, session
+from models import Post, User
 
 # a few configs due to the restructuing of
 # the app folders/directories
@@ -9,6 +10,16 @@ configs = {
 }
 
 app = Flask('app', **configs)
+app.secret_key = '3ffa85b890bc3cf0aba84c2697dbe446c33a4c9'
+
+# login-required decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get('user') is None:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/')
 def home():
@@ -26,10 +37,35 @@ def register():
         }
         user = User(**form)
         user.save()
+        return redirect(url_for('login'))
     return render_template('register.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    next_ = request.values.get('next')
+    # import pdb; pdb.set_trace()
+    if request.method == 'POST':
+        form = {
+            'username' : request.form['username'],
+            'password' : request.form['password']
+        }
+        user = User.validate(**form)
+        if user[0]:
+            if request.form['next'] != '':
+                session['user'] = {
+                    'username': user[1].username
+                }
+                return redirect(request.form['next'])
+            return redirect(url_for('home'))
+    return render_template('login.html', next=next_)
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect('/')
 
 @app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_post():
     if request.method == 'POST':
         form = {
@@ -42,6 +78,6 @@ def add_post():
 
 @app.route('/posts')
 def show_posts():
-    posts = session.query(Post).all()
+    posts = Post.get()
     # import pdb; pdb.set_trace()
     return render_template('posts.html', posts=posts)

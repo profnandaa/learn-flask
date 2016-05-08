@@ -4,7 +4,9 @@
  <div class="jumbotron">
         <h1>Write like a Pro</h1>
         <p class="lead">You only have one life, so write it.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+        {% if not session['user'] %}
+        <p><a class="btn btn-lg btn-success" href="/register" role="button">Sign up today</a></p>
+        {% endif %}
       </div>
 
 
