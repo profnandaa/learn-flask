@@ -43,7 +43,6 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     next_ = request.values.get('next')
-    # import pdb; pdb.set_trace()
     if request.method == 'POST':
         form = {
             'username' : request.form['username'],
@@ -53,7 +52,8 @@ def login():
         if user[0]:
             if request.form['next'] != '':
                 session['user'] = {
-                    'username': user[1].username
+                    'username': user[1].username,
+                    'id': user[1].id
                 }
                 return redirect(request.form['next'])
             return redirect(url_for('home'))
@@ -67,17 +67,24 @@ def logout():
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_post():
+    # import pdb; pdb.set_trace()
     if request.method == 'POST':
         form = {
             'title': request.form['title'],
             'body':  request.form['body']
         }
         post = Post(**form)
-        post.save()
+        post.save(session['user']['id'])
     return render_template('add_post.html')
 
 @app.route('/posts')
 def show_posts():
     posts = Post.get()
-    # import pdb; pdb.set_trace()
     return render_template('posts.html', posts=posts)
+
+@app.route('/user/<int:id>')
+def user_profile(id):
+    user = User.get(id)
+    if user:
+        return render_template('user_profile.html', user=user)
+    return redirect('/')

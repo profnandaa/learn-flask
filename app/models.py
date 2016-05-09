@@ -44,6 +44,13 @@ class User(Base):
 		user = user.one()
 		return user.valid_password(kwargs.get('password')), user
 
+	@classmethod
+	def get(cls, user_id):
+		user = session.query(cls).filter(cls.id==user_id)
+		if user.count() == 1:
+			return user.one()
+		return None
+
 class Post(Base):
 	__tablename__ = 'post'
 	id = Column(Integer, primary_key=True)
@@ -53,7 +60,8 @@ class Post(Base):
 	user_id = Column(Integer, ForeignKey('user.id'))
 	user = relationship(User)
 
-	def save(self):
+	def save(self, user_id):
+		self.user = User.get(user_id)
 		session.add(self)
 		session.commit()
 

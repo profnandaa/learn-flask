@@ -4,6 +4,7 @@
 
 {%for post in posts %}
     <h3>{{ post.title }}</h3>
+    <p><em>Posted by <a href="/user/{{ post.user.id }}">{{ post.user.username }}</a></em></p>
     <p>{{ post.body }}</p>
 {% endfor %}
 

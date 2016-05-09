@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3><i class="glyphicon glyphicon-user"></i> {{ user.username }} </h3>
+<p><strong>First Name: </strong> {{ user.first_name }}  <br/>
+<strong>Last Name: </strong> {{ user.last_name }}
+</p>
+<p><strong>Bio: </strong> {{ user.bio }} </p>
+
+
+{% endblock %}
