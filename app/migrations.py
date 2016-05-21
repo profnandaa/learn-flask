@@ -1,5 +1,5 @@
 import sys
-from models import Base, engine
+from models import Base, engine, User, Post
 
 
 if sys.argv[1] == '--migrate':
